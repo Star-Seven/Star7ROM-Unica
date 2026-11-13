@@ -1,0 +1,23 @@
+<!--
+  ~ This XML file declares which platform signature permissions to grant to
+  ~ platform signed nonsystem apps.
+  -->
+<permissions>
+    <signature-permissions package="com.samsung.android.app.searchwidget">
+        <permission name="com.samsung.android.provider.indexing.permission.ACCESS_PROVIDER"/>
+		<permission name="com.samsung.android.scs.ai.search.permission.WRITE"/>
+		<permission name="com.samsung.android.scs.ai.search.permission.READ"/>
+		<permission name="com.samsung.android.app.notes.READ"/>
+		<permission name="com.sec.android.diagmonagent.permission.DIAGMON"/>
+		<permission name="android.permission.PACKAGE_USAGE_STATS"/>
+		<permission name="android.permission.SUBSTITUTE_SHARE_TARGET_APP_NAME_AND_ICON"/>
+		<permission name="android.permission.GLOBAL_SEARCH"/>
+		<permission name="com.samsung.android.app.reminder.permission.READ"/>
+		<permission name="com.samsung.android.settings.intelligence.READ_SETTINGS_SEARCH_DATA_PROVIDER"/>
+		<permission name="android.permission.CONTROL_KEYGUARD"/>
+		<permission name="android.permission.WRITE_SETTINGS"/>
+		<permission name="android.permission.START_ANY_ACTIVITY"/>
+		<permission name="android.permission.GET_INTENT_SENDER_INTENT"/>
+		<permission name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+    </signature-permissions>
+</permissions>

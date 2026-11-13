@@ -1,0 +1,6 @@
+<config>
+	<install-in-user-type package="com.samsung.android.smartcopywriting">
+		<install-in user-type="SYSTEM" />
+		<do-not-install-in user-type="android.os.usertype.profile.PRIVATE" />
+	</install-in-user-type>
+</config>

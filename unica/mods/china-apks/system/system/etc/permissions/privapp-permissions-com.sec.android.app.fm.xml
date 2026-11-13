@@ -1,0 +1,16 @@
+<permissions>
+    <privapp-permissions package="com.sec.android.app.fm">
+        <permission name="android.permission.READ_PRIVILEGED_PHONE_STATE"/>
+        <permission name="android.permission.INTERACT_ACROSS_USERS"/>
+        <permission name="android.permission.CAPTURE_AUDIO_OUTPUT"/>
+        <permission name="android.permission.RECORD_AUDIO"/>
+        <permission name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+        <permission name="android.permission.START_FOREGROUND_SERVICES_FROM_BACKGROUND"/>
+        <permission name="android.permission.SCHEDULE_EXACT_ALARM"/>
+        <permission name="com.sec.android.diagmonagent.permission.DIAGMON"/>
+        <permission name="com.sec.android.diagmonagent.permission.PROVIDER"/>
+        <permission name="android.permission.MANAGE_USB"/>
+        <permission name="android.permission.READ_SEARCH_INDEXABLES"/>
+        <permission name="android.permission.BLUETOOTH_CONNECT"/>
+    </privapp-permissions>
+</permissions>

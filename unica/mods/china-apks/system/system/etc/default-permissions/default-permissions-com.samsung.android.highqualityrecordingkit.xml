@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<exceptions>
+    <exception package="com.samsung.android.highqualityrecordingkit">
+        <permission name="android.permission.BLUETOOTH_CONNECT" fixed="true"/>
+    </exception>
+</exceptions>

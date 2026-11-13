@@ -1,0 +1,6 @@
+<permissions>
+    <privapp-permissions package="com.sec.android.yellowpage">
+        <permission name="android.permission.SCHEDULE_EXACT_ALARM"/>
+        <permission name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+    </privapp-permissions>
+</permissions>

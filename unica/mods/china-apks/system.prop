@@ -1,0 +1,7 @@
+# China (CHC) source identity. The ROM is based on the SM-S9260 (Galaxy S24,
+# China) firmware, so the system-partition product identity is repointed from the
+# S721B donor (r12sxxx) to the China source (e2qzcx). READ_AND_APPLY_PROPS writes
+# these just before china-apks/customize.sh runs, i.e. after unica/patches/miscs
+# (which also touches build.prop), so this is the final value that ships.
+ro.product.system.model=SM-S9260
+ro.product.system.name=e2qzcx

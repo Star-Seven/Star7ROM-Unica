@@ -1,0 +1,12 @@
+<permissions>
+    <privapp-permissions package="com.samsung.android.gimbaltrackingkit">
+	<permission name="android.permission.CAMERA" />
+        <permission name="com.samsung.permission.READ_SM_DATA" />
+        <permission name="com.samsung.permission.WRITE_SM_DATA" />
+        <permission name="com.samsung.android.permission.SEM_APP_RESTRICTION" />
+	<permission name="android.permission.DEVICE_POWER" />
+        <permission name="com.samsung.android.permission.SEM_UPDATE_NOTIFICATION_CHANNELS" />
+        <permission name="android.permission.MODIFY_AUDIO_ROUTING" />
+        <permission name="android.permission.MODIFY_PHONE_STATE" />
+    </privapp-permissions>
+</permissions>

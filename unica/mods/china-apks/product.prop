@@ -1,0 +1,7 @@
+# China (CHC) feature gates. Both back apps this module installs: otch is the
+# OneTouch entrance (system/priv-app/OneTouch) and bbt.circle2search is the
+# circle-to-search bar. They are China-only, so they ship here (this module has
+# a disable-intl marker) rather than in the shared product.prop.
+# READ_AND_APPLY_PROPS writes them into /product/etc/build.prop.
+ro.bbt.support.circle2search=true
+ro.otch.support.entrance=true
