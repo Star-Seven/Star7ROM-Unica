@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<permissions>
+    <privapp-permissions package="com.tools.corsicanu">
+        <permission name="android.permission.REBOOT"/>
+        <permission name="android.permission.RECOVERY"/>
+    </privapp-permissions>
+</permissions> 

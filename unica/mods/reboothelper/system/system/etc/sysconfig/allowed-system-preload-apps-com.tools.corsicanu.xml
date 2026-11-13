@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Samsung's PackageManager only scans /system/priv-app when PMRune
+  PM_ALLOWED_SYSTEM_PRELOAD_APPS is enabled and the package name is listed in
+  an <allowed-system-preload> entry here. RebootHelper is not part of the donor
+  S24 FE image, so without this entry InstallPackageHelper.processParseResult()
+  logs "Package is not in allowed list : com.tools.corsicanu" and returns
+  before addForInitLI(), leaving the APK unscanned and its RecoveryActivity
+  unregistered. The privapp-permissions XML next to it is never reached.
+-->
+<config>
+    <allowed-system-preload package="com.tools.corsicanu"/>
+</config>

@@ -1,0 +1,4 @@
+id=reboothelper
+name=Long-press restart to recovery
+author=Star-Seven, corsicanu
+description=Hooks the long-press gesture on the power menu restart item and launches the privileged RebootHelper activity, which reboots into recovery. Short press keeps the stock restart behaviour.

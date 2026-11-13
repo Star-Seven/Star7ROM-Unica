@@ -1,0 +1,77 @@
+From 1111111111111111111111111111111111111111 Mon Sep 17 00:00:00 2001
+From: Star-Seven <72426083+Star-Seven@users.noreply.github.com>
+Date: Sun, 5 Oct 2026 05:57:57 +0000
+Subject: [PATCH] Long-press restart to boot into recovery
+
+Hooks the long-press gesture of the global-actions restart item and launches
+the privileged RebootHelper activity (com.tools.corsicanu.RecoveryActivity),
+which calls PowerManager.reboot("recovery"). A short press keeps the stock
+restart behaviour. Adds KeyGuardManagerWrapper.getHadesContext() so the view
+model can obtain a Context to start the activity.
+
+---
+ smali_classes6/com/samsung/android/globalactions/presentation/viewmodel/RestartActionViewModel.smali | 31 +++++++++++++++++++++++++++++++
+ smali_classes6/com/samsung/android/globalactions/util/KeyGuardManagerWrapper.smali | 10 ++++++++++
+ 2 files changed, 41 insertions(+)
+
+--- a/smali_classes6/com/samsung/android/globalactions/presentation/viewmodel/RestartActionViewModel.smali
++++ b/smali_classes6/com/samsung/android/globalactions/presentation/viewmodel/RestartActionViewModel.smali
+@@ -166,6 +166,41 @@
+ 
+ 
+ # virtual methods
++.method public blacklist onLongPress()V
++    .locals 3
++
++    new-instance v0, Landroid/content/ComponentName;
++
++    const-string v1, "com.tools.corsicanu"
++
++    const-string v2, "com.tools.corsicanu.RecoveryActivity"
++
++    invoke-direct {v0, v1, v2}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
++
++    new-instance v1, Landroid/content/Intent;
++
++    invoke-direct {v1}, Landroid/content/Intent;-><init>()V
++
++    invoke-virtual {v1, v0}, Landroid/content/Intent;->setComponent(Landroid/content/ComponentName;)Landroid/content/Intent;
++
++    const/high16 v0, 0x14000000
++
++    invoke-virtual {v1, v0}, Landroid/content/Intent;->setFlags(I)Landroid/content/Intent;
++
++    iget-object v0, p0, Lcom/samsung/android/globalactions/presentation/viewmodel/RestartActionViewModel;->mKeyguardManagerWrapper:Lcom/samsung/android/globalactions/util/KeyGuardManagerWrapper;
++
++    if-eqz v0, :cond_0
++
++    invoke-virtual {v0}, Lcom/samsung/android/globalactions/util/KeyGuardManagerWrapper;->getHadesContext()Landroid/content/Context;
++
++    move-result-object v0
++
++    invoke-virtual {v0, v1}, Landroid/content/Context;->startActivity(Landroid/content/Intent;)V
++
++    :cond_0
++    return-void
++.end method
++
+ .method public blacklist getActionInfo()Lcom/samsung/android/globalactions/presentation/viewmodel/ActionInfo;
+     .locals 0
+ 
+--- a/smali_classes6/com/samsung/android/globalactions/util/KeyGuardManagerWrapper.smali
++++ b/smali_classes6/com/samsung/android/globalactions/util/KeyGuardManagerWrapper.smali
+@@ -44,6 +44,14 @@
+ 
+ 
+ # virtual methods
++.method public blacklist getHadesContext()Landroid/content/Context;
++    .locals 0
++
++    iget-object p0, p0, Lcom/samsung/android/globalactions/util/KeyGuardManagerWrapper;->mContext:Landroid/content/Context;
++
++    return-object p0
++.end method
++
+ .method public blacklist isCurrentUserSecure()Z
+     .locals 1
+ 
