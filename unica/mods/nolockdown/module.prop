@@ -1,0 +1,4 @@
+id=nolockdown
+name=Remove Lockdown mode from power menu
+author=Star-Seven
+description=Keep the global actions (power) menu at the stock four items (Power off / Restart / Emergency call / Medical info) by disabling the Lockdown mode entry Samsung adds once a pattern/PIN lock screen is set.
