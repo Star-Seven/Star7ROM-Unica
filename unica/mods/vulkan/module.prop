@@ -1,0 +1,4 @@
+id=vulkan
+name=Vulkan renderer
+author=StarSeven
+description=Adds the UN1CA Vulkan renderer property hook (opt-in, off by default).
