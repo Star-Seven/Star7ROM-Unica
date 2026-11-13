@@ -1,0 +1,4 @@
+id=batteryreg
+name=Battery information (regulatory rows)
+author=StarSeven
+description=Show the Battery health / Battery cycle count / Manufacture date / First use date rows on Settings -> About phone -> Battery information (EU eco-design regulatory info).
