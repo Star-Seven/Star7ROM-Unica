@@ -1,0 +1,105 @@
+From 2e1b3fe3628cb380167315e45f22d7153d51b1de Mon Sep 17 00:00:00 2001
+From: Devcore94 <devcore94@users.noreply.github.com>
+Date: Sat, 22 Aug 2026 08:08:41 +0200
+Subject: [PATCH] unica: mods: settings: adapt QPR2 screen capture detection
+
+---
+ .../ScreenRecordingCallbackController.smali   | 21 ++++++++++
+ .../server/wm/WindowManagerService.smali      | 42 +++++++++++++++++++
+ 2 files changed, 63 insertions(+)
+
+diff --git a/smali_classes2/com/android/server/wm/ScreenRecordingCallbackController.smali b/smali_classes2/com/android/server/wm/ScreenRecordingCallbackController.smali
+index 15fc202..3c5585f 100644
+--- a/smali_classes2/com/android/server/wm/ScreenRecordingCallbackController.smali
++++ b/smali_classes2/com/android/server/wm/ScreenRecordingCallbackController.smali
+@@ -47,6 +47,27 @@
+ .method public final dispatchCallbacks(Landroid/util/ArraySet;Z)V
+     .locals 5
+ 
++    iget-object v0, p0, Lcom/android/server/wm/ScreenRecordingCallbackController;->mWms:Lcom/android/server/wm/WindowManagerService;
++
++    iget-object v0, v0, Lcom/android/server/wm/WindowManagerService;->mContext:Landroid/content/Context;
++
++    invoke-virtual {v0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object v0
++
++    const-string v1, "unica_ss_detection"
++
++    const/4 v2, 0x0
++
++    invoke-static {v0, v1, v2}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
++
++    move-result v0
++
++    if-eqz v0, :unica_ss_detection_enabled
++
++    const/4 p2, 0x0
++
++    :unica_ss_detection_enabled
+     invoke-virtual {p1}, Landroid/util/ArraySet;->isEmpty()Z
+ 
+     move-result v0
+diff --git a/smali_classes2/com/android/server/wm/WindowManagerService.smali b/smali_classes2/com/android/server/wm/WindowManagerService.smali
+index 8cf3151..e5a53a2 100644
+--- a/smali_classes2/com/android/server/wm/WindowManagerService.smali
++++ b/smali_classes2/com/android/server/wm/WindowManagerService.smali
+@@ -22867,6 +22867,29 @@
+ 
+     if-eqz v0, :cond_1
+ 
++    iget-object v0, p0, Lcom/android/server/wm/WindowManagerService;->mContext:Landroid/content/Context;
++
++    invoke-virtual {v0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object v0
++
++    const-string v1, "unica_ss_detection"
++
++    const/4 v3, 0x0
++
++    invoke-static {v0, v1, v3}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
++
++    move-result v0
++
++    if-eqz v0, :unica_ss_detection_enabled
++
++    invoke-static {}, Ljava/util/Collections;->emptyList()Ljava/util/List;
++
++    move-result-object p0
++
++    return-object p0
++
++    :unica_ss_detection_enabled
+     iget-object v0, p0, Lcom/android/server/wm/WindowManagerService;->mGlobalLock:Lcom/android/server/wm/WindowManagerGlobalLock;
+ 
+     invoke-static {}, Lcom/android/server/wm/WindowManagerService;->boostPriorityForLockedSection()V
+@@ -26774,6 +26797,25 @@
+ 
+     invoke-virtual {p0}, Landroid/view/IWindowManager$Stub;->registerScreenRecordingCallback_enforcePermission()V
+ 
++    iget-object v0, p0, Lcom/android/server/wm/WindowManagerService;->mContext:Landroid/content/Context;
++
++    invoke-virtual {v0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object v0
++
++    const-string v1, "unica_ss_detection"
++
++    const/4 v2, 0x0
++
++    invoke-static {v0, v1, v2}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
++
++    move-result v0
++
++    if-eqz v0, :unica_ss_detection_enabled
++
++    return v2
++
++    :unica_ss_detection_enabled
+     iget-object p0, p0, Lcom/android/server/wm/WindowManagerService;->mScreenRecordingCallbackController:Lcom/android/server/wm/ScreenRecordingCallbackController;
+ 
+     iget-object v0, p0, Lcom/android/server/wm/ScreenRecordingCallbackController;->mWms:Lcom/android/server/wm/WindowManagerService;
+-- 
+2.53.0
+
