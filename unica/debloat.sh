@@ -59,7 +59,7 @@ priv-app/FamilyLinkParentalControls
 priv-app/SearchSelector
 "
 
-# Keep the donor Gmail package in the d2s Impulse profile. Other targets keep
+# Keep the donor Gmail package in the d2s Star7ROM profile. Other targets keep
 # the upstream debloat policy; no live download or APK re-signing is needed.
 if [[ "$TARGET_CODENAME" != "d2s" || "$TARGET_SINGLE_SYSTEM_IMAGE" != "essi85" ]]; then
     PRODUCT_DEBLOAT+="
@@ -106,12 +106,21 @@ system/etc/sysconfig/samsungauthframework.xml
 system/etc/sysconfig/samsungpassapp.xml
 system/hidden/SmartTutor
 system/preload/Facebook_stub_preload
+system/priv-app/AppUpdateCenter
 system/priv-app/AREmoji
 system/priv-app/AREmojiEditor
 system/priv-app/AuthFramework
 system/priv-app/BCService
-system/priv-app/DiagMonAgent94
+system/priv-app/Crane
+system/priv-app/CpAgent
+system/priv-app/CIDManager
+system/priv-app/DiagMonAgent97
 system/priv-app/DigitalKey
+system/priv-app/DeviceQualityAgent37
+system/priv-app/EsimKeyString
+system/priv-app/EsimClient
+system/priv-app/EuiccService
+system/priv-app/EuiccGoogle
 system/priv-app/FBInstaller_NS
 system/priv-app/FBServices
 system/priv-app/FotaAgent
@@ -122,7 +131,10 @@ system/priv-app/SamsungBilling
 system/priv-app/SamsungCarKeyFw
 system/priv-app/SamsungMessages
 system/priv-app/SamsungPass
-system/priv-app/SOAgent75
+system/priv-app/SmartCallProvider
+system/priv-app/SKMSAgent
+system/priv-app/SOAgent77
+system/priv-app/SamsungPositioning
 system/priv-app/SPPPushClient
 system/priv-app/StickerFaceARAvatar
 "
