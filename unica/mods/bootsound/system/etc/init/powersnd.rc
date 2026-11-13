@@ -1,0 +1,12 @@
+# { Rune.SEC_AUDIO_POWER_SOUND
+on property:persist.sys.unica.bootsound=true && property:service.media.powersnd=1
+    start powersnd
+
+service powersnd /system/bin/samsungpowersoundplay
+    class main
+    user audioserver
+    group system
+    disabled
+    oneshot
+# } Rune.SEC_AUDIO_POWER_SOUND
+
