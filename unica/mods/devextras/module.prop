@@ -1,0 +1,4 @@
+id=devextras
+name=Hide developer status
+author=StarSeven
+description=UN1CA HideDeveloperStatusUtils: hide adb/developer settings per app, with a Settings UI (Security and privacy -> More security and privacy).
