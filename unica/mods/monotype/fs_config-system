@@ -1,0 +1,7 @@
+system 0 0 755 capabilities=0x0
+system/app 0 0 755 capabilities=0x0
+system/app/SamsungSans 0 0 755 capabilities=0x0
+system/app/SamsungSans/SamsungSans.apk 0 0 644 capabilities=0x0
+system/etc 0 0 755 capabilities=0x0
+system/etc/sysconfig 0 0 755 capabilities=0x0
+system/etc/sysconfig/allowed-system-preload-apps-com.monotype.android.font.samsungsans.xml 0 0 644 capabilities=0x0

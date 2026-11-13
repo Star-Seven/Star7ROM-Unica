@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Samsung's PackageManager only scans /system/app when PMRune
+  PM_ALLOWED_SYSTEM_PRELOAD_APPS is enabled and the package name is listed in
+  an <allowed-system-preload> entry here. SamsungSans is not part of the donor
+  S24 FE image, so without this entry InstallPackageHelper.processParseResult()
+  logs "Package is not in allowed list : com.monotype.android.font.samsungsans"
+  and returns before addForInitLI(), leaving the APK unscanned so the font never
+  shows up in Settings -> Display -> Font size and style.
+
+  SystemConfig reads every XML under /system/etc/sysconfig, so a standalone file
+  is enough and avoids depending on the donor file's structure. Same mechanism as
+  unica/mods/reboothelper.
+-->
+<config>
+    <allowed-system-preload package="com.monotype.android.font.samsungsans"/>
+</config>
