@@ -1,0 +1,3 @@
+# China (CHC) base: Notes40 is flagship-only and is debloated by
+# target/d2xks/debloat.sh. Disable the legacy preload module so it does not
+# re-download Notes as a preload app.

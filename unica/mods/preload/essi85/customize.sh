@@ -1,7 +1,8 @@
 # Samsung Notes is absent from the donor image. Do not enable the legacy
 # module's unpinned downloads of unrelated apps for this device.
-if [[ "$TARGET_CODENAME" != "d2s" ]]; then
-    ABORT "Impulse bundled apps are only validated for d2s" || return 1
+SUPPORTED_CODENAMES=("d1" "d1xks" "d2s" "d2x" "d2xks")
+if [[ ! " ${SUPPORTED_CODENAMES[*]} " =~ " ${TARGET_CODENAME} " ]]; then
+    ABORT "Star7ROM bundled apps are only validated for Exynos 9825 Note10 devices" || return 1
 fi
 
 NOTES_VERSION="4.4.45.37"
