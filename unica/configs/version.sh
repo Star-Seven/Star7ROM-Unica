@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-ROM_VERSION="v1.0-oneui85-alpha2"
+ROM_VERSION="V1.0"
 
 ROM_COMMIT="@$(git rev-parse --short HEAD)"
 if ! git diff --quiet --ignore-submodules=dirty -- || \

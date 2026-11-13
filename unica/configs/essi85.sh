@@ -38,6 +38,7 @@ SOURCE_SUPER_GROUP_NAME="group_basic"
 # flags it can derive reliably from extracted floating features and files.
 SOURCE_AUTO_BRIGHTNESS_TYPE="5"
 SOURCE_DVFS_CONFIG_NAME="dvfs_policy_default"
+SOURCE_DVFSAPP_CONFIG_DVFS_POLICY_FILENAME="dvfs_policy_default"
 SOURCE_NFC_CHIP_VENDOR="SLSI"
 SOURCE_FP_SENSOR_CONFIG="google_touch_display_optical,settings=3,aod_transition_animation"
 SOURCE_HAS_MASS_CAMERA_APP=true
