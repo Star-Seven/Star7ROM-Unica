@@ -1,0 +1,4 @@
+China (CHC) variant: international CSC config is not wanted.
+csc-chc supplies the pure CHC OMC (and this mod's international OMC is
+deleted by it anyway); the CSC-feature tweaks here also target the CHC file,
+whose values already match. Disabled on every target.
