@@ -4,6 +4,14 @@ TARGET_FIRMWARE_PATH="$FW_DIR/$(echo -n "$TARGET_FIRMWARE" | sed 's./._.g' | rev
 LOG_STEP_IN "- Replacing saiv blobs"
 DELETE_FROM_WORK_DIR "system" "system/saiv"
 ADD_TO_WORK_DIR "$TARGET_FIRMWARE_PATH" "system" "system/saiv" 0 0 755 "u:object_r:system_file:s0"
+# The donor's libStride/face stack (lib64) is what ships in the ROM, so its
+# models must come from the donor too. N976N's older saiv models make the
+# Stride OCR TFLite interpreter fail to map and crash on
+# TfLiteInterpreterGetInputTensor (SmartCapture/Gallery OCR SIGSEGV).
+DELETE_FROM_WORK_DIR "system" "system/saiv/face"
+ADD_TO_WORK_DIR "$SOURCE_FIRMWARE_PATH" "system" "system/saiv/face" 0 0 755 "u:object_r:system_file:s0"
+DELETE_FROM_WORK_DIR "system" "system/saiv/textrecognition"
+ADD_TO_WORK_DIR "$SOURCE_FIRMWARE_PATH" "system" "system/saiv/textrecognition" 0 0 755 "u:object_r:system_file:s0"
 LOG_STEP_OUT
 
 LOG_STEP_IN "- Replacing cameradata blobs"
