@@ -1,0 +1,4 @@
+id=sounds
+name=S25 Ultra sounds
+author=Ocin4ever, StarSeven
+description=Ships the S25 Ultra (pa3qxxx) ringtone and notification sets. unica/patches/miscs/vendor.prop points the default alerts at the ACH_* names, which only exist in this set.
