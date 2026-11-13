@@ -1,0 +1,74 @@
+Subject: [PATCH] Fix resolution submenu and disable HFR
+
+diff --git a/smali_classes5/com/samsung/android/settings/display/ScreenResolutionFragment.smali b/smali_classes5/com/samsung/android/settings/display/ScreenResolutionFragment.smali
+--- a/smali_classes5/com/samsung/android/settings/display/ScreenResolutionFragment.smali
++++ b/smali_classes5/com/samsung/android/settings/display/ScreenResolutionFragment.smali
+@@ -382,9 +382,15 @@
+ 
+     iput-object v1, p0, Lcom/samsung/android/settings/display/ScreenResolutionFragment;->mScreenResolutionButton:Lcom/samsung/android/settings/widget/SecHorizontalRadioPreference;
+ 
+-    sget-object v1, Lcom/samsung/android/settings/Rune;->COMMON_CONFIG_PACKAGE_NAME_SMART_MANAGER:Ljava/lang/String;
++    iget-object v1, p0, Lcom/samsung/android/settings/display/ScreenResolutionFragment;->mScreenResolutionButton:Lcom/samsung/android/settings/widget/SecHorizontalRadioPreference;
+ 
+-    invoke-virtual {p0, p1}, Lcom/android/settings/SettingsPreferenceFragment;->removePreference(Ljava/lang/String;)Z
++    iget p1, p0, Lcom/samsung/android/settings/display/ScreenResolutionFragment;->mScreenResolution:I
++
++    invoke-static {p1}, Ljava/lang/Integer;->toString(I)Ljava/lang/String;
++
++    move-result-object p1
++
++    invoke-virtual {v1, p1}, Lcom/samsung/android/settings/widget/SecHorizontalRadioPreference;->setValue(Ljava/lang/String;)V
+ 
+     new-instance p1, Landroid/graphics/Point;
+ 
+@@ -588,9 +594,7 @@
+ 
+     const/4 v3, 0x2
+ 
+-    if-eq p1, v1, :cond_6
+-
+-    if-eq p1, v3, :cond_5
++    goto :cond_5
+ 
+     invoke-static {v5, v2, v6}, Lcom/samsung/android/settings/display/ScreenResolutionFragment;->formatDimensions(Ljava/text/NumberFormat;II)Ljava/lang/String;
+ 
+diff --git a/smali_classes5/com/samsung/android/settings/display/controller/SecScreenResolutionSingleChoiceController.smali b/smali_classes5/com/samsung/android/settings/display/controller/SecScreenResolutionSingleChoiceController.smali
+--- a/smali_classes5/com/samsung/android/settings/display/controller/SecScreenResolutionSingleChoiceController.smali
++++ b/smali_classes5/com/samsung/android/settings/display/controller/SecScreenResolutionSingleChoiceController.smali
+@@ -522,7 +522,7 @@
+ 
+     sget-object p0, Lcom/samsung/android/settings/Rune;->COMMON_CONFIG_PACKAGE_NAME_SMART_MANAGER:Ljava/lang/String;
+ 
+-    const/4 p0, 0x3
++    const/4 p0, 0x0
+ 
+     return p0
+ .end method
+diff --git a/smali_classes5/com/samsung/android/settings/display/controller/HighRefreshRatePreferenceController.smali b/smali_classes5/com/samsung/android/settings/display/controller/HighRefreshRatePreferenceController.smali
+--- a/smali_classes5/com/samsung/android/settings/display/controller/HighRefreshRatePreferenceController.smali
++++ b/smali_classes5/com/samsung/android/settings/display/controller/HighRefreshRatePreferenceController.smali
+@@ -195,22 +195,9 @@
+ .end method
+ 
+ .method public getAvailabilityStatus()I
+-    .locals 1
++    .locals 0
+ 
+-    iget-object p0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
+-
+-    const/4 v0, 0x0
+-
+-    invoke-static {p0, v0}, Lcom/samsung/android/settings/Rune;->supportHighRefreshRate(Landroid/content/Context;I)Z
+-
+-    move-result p0
+-
+-    if-eqz p0, :cond_0
+-
+-    return v0
+-
+-    :cond_0
+-    const/4 p0, 0x3
++    const/4 p0, 0x2
+ 
+     return p0
+ .end method

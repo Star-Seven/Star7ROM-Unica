@@ -1,17 +1,17 @@
 From 9325011ea7602943cef11cfb2adfc1cc68049d2e Mon Sep 17 00:00:00 2001
 From: ExtremeXT <75576145+ExtremeXT@users.noreply.github.com>
 Date: Wed, 18 Jun 2025 12:31:09 +0300
-Subject: [PATCH] Disable dynamic resolution control
+Subject: [PATCH] Enable dynamic resolution control
 
 ---
- .../android/game/GameManagerService$DisplayListener.smali       | 2 +-
+ smali/com/samsung/android/game/display/GameDisplayListener.smali | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/smali/com/samsung/android/game/GameManagerService$DisplayListener.smali b/smali/com/samsung/android/game/GameManagerService$DisplayListener.smali
-index 0a06997..5162fef 100644
---- a/smali/com/samsung/android/game/GameManagerService$DisplayListener.smali
-+++ b/smali/com/samsung/android/game/GameManagerService$DisplayListener.smali
-@@ -61,7 +61,7 @@
+diff --git a/smali/com/samsung/android/game/display/GameDisplayListener.smali b/smali/com/samsung/android/game/display/GameDisplayListener.smali
+index dee84c6..0bea5f1 100644
+--- a/smali/com/samsung/android/game/display/GameDisplayListener.smali
++++ b/smali/com/samsung/android/game/display/GameDisplayListener.smali
+@@ -46,7 +46,7 @@
  
      const-string v1, ""
  
@@ -20,6 +20,5 @@ index 0a06997..5162fef 100644
  
      move-result v0
  
--- 
+--
 2.45.2
-

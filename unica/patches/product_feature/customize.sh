@@ -173,9 +173,30 @@ if ! $SOURCE_HAS_QHD_DISPLAY; then
             LOG "- Keeping API $SOURCE_API_LEVEL source graphics core for multi resolution"
         fi
         ADD_TO_WORK_DIR "e2sxxx" "system" "media"
-        APPLY_PATCH "system" "system/framework/framework.jar" "$SRC_DIR/unica/patches/product_feature/resolution/framework.jar/0001-Enable-dynamic-resolution-control.patch"
+        # The oneui8.5 window manager force-fits the default display to 75% of its
+        # initial size (1440x3040 -> 1080x2280@420) inside
+        # WindowManagerService.applyForcedPropertiesForDefaultDisplay whenever
+        # CoreRune.FW_DYNAMIC_RESOLUTION_CONTROL is true: it reads
+        # /sys/class/lcd/panel/window_type to detect a detached LCD, the read
+        # throws on exynos9825, and the fallthrough scales the display and persists
+        # display_size_forced every boot. That is the d2xks FHD+ default and the
+        # offset "powered by Android" stage (the up_param layer is scaled onto the
+        # FHD+ logical rect). Keep the gate at its stock value (false) so the panel
+        # comes up native; the Settings resolution menu is unaffected because
+        # setForcedDisplaySizeDensity is not gated by it. Set
+        # STAR7_AUTO_FORCE_DEFAULT_RESOLUTION=true to restore the stock auto-fit.
+        if ${STAR7_AUTO_FORCE_DEFAULT_RESOLUTION:-false}; then
+            APPLY_PATCH "system" "system/framework/framework.jar" "$SRC_DIR/unica/patches/product_feature/resolution/framework.jar/0001-Enable-dynamic-resolution-control.patch"
+        else
+            LOG "- Keeping CoreRune.FW_DYNAMIC_RESOLUTION_CONTROL at stock (native default resolution)"
+        fi
         APPLY_PATCH "system" "system/framework/gamemanager.jar" "$SRC_DIR/unica/patches/product_feature/resolution/gamemanager.jar/0001-Enable-dynamic-resolution-control.patch"
         APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" "$SRC_DIR/unica/patches/product_feature/resolution/SecSettings.apk/0001-Enable-dynamic-resolution-control.patch"
+        # The availability controllers are what actually enable the resolution
+        # submenu and retire the S24 FE high-refresh entry; 0001 alone only
+        # lifts the entry row. Kept as a second patch so it can be dropped
+        # independently if the donor source changes.
+        APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" "$SRC_DIR/unica/patches/product_feature/resolution/SecSettings.apk/0002-Fix-resolution-submenu-and-disable-HFR.patch"
         SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_COMMON_CONFIG_DYN_RESOLUTION_CONTROL" "WQHD,FHD,HD"
         LOG_STEP_OUT
     fi
@@ -194,13 +215,30 @@ if ! $SOURCE_HAS_HW_MDNIE; then
         SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_COMMON_SUPPORT_COLOR_LENS" "TRUE"
         APPLY_PATCH "system" "system/framework/framework.jar" "$SRC_DIR/unica/patches/product_feature/mdnie/hw/framework.jar/0001-Enable-HW-mDNIe.patch"
         APPLY_PATCH "system" "system/framework/services.jar" "$SRC_DIR/unica/patches/product_feature/mdnie/hw/services.jar/0001-Enable-HW-mDNIe.patch"
-        APPLY_PATCH "system" "system/framework/services.jar" "$SRC_DIR/unica/patches/product_feature/mdnie/hw/services.jar/0002-Enable-EAD.patch"
-        APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" "$SRC_DIR/unica/patches/product_feature/mdnie/hw/SecSettings.apk/0001-Enable-EAD.patch"
-        APPLY_PATCH "system_ext" "priv-app/SystemUI/SystemUI.apk" "$SRC_DIR/unica/patches/product_feature/mdnie/hw/SystemUI.apk/0001-Enable-EAD.patch"
+        # Keep the 2-arg client overload even with EAD disabled: the sead APK below
+        # is persistent and started on boot, so without this it dies with
+        # NoSuchMethodError setEadMode(I[I)V. The overload forwards to the stock
+        # 3-arg method and is otherwise inert.
+        APPLY_PATCH "system" "system/framework/framework.jar" "$SRC_DIR/unica/patches/product_feature/mdnie/hw/framework.jar/0002-Add-EAD-call-site-shim.patch"
         ADD_TO_WORK_DIR "e2sxxx" "system" "system/bin/mafpc_write" 0 2000 755 "u:object_r:mafpc_write_exec:s0"
         ADD_TO_WORK_DIR "e2sxxx" "system" "system/etc/permissions/privapp-permissions-com.samsung.android.sead.xml" 0 0 644 "u:object_r:system_file:s0"
         ADD_TO_WORK_DIR "e2sxxx" "system" "system/priv-app/EnvironmentAdaptiveDisplay"
         APPLY_PATCH "system" "system/priv-app/EnvironmentAdaptiveDisplay/EnvironmentAdaptiveDisplay.apk" "$SRC_DIR/unica/patches/product_feature/mdnie/hw/EnvironmentAdaptiveDisplay.apk/0001-Fix-framework-resource-IDs-for-API-36.patch"
+
+        # Environment Adaptive Display (EAD / "环境自适应", com.samsung.android.sead)
+        # stays off by default: sead's WhiteRGBChanger writes the same
+        # /sys/class/mdnie/mdnie{1}/whiteRGB registers as Eye Comfort Shield's colour
+        # temperature, so enabling EAD breaks Eye Comfort. The APK is staged above but
+        # inert. Set STAR7_ENABLE_EAD=true only to develop EAD, after fixing that
+        # conflict.
+        if [ "${STAR7_ENABLE_EAD:-false}" = "true" ]; then
+            APPLY_PATCH "system" "system/framework/services.jar" "$SRC_DIR/unica/patches/product_feature/mdnie/hw/services.jar/0002-Enable-EAD.patch"
+            APPLY_PATCH "system" "system/framework/services.jar" "$SRC_DIR/unica/patches/product_feature/mdnie/hw/services.jar/0003-Implement-EAD-sysfs-write.patch"
+            APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" "$SRC_DIR/unica/patches/product_feature/mdnie/hw/SecSettings.apk/0001-Enable-EAD.patch"
+            APPLY_PATCH "system_ext" "priv-app/SystemUI/SystemUI.apk" "$SRC_DIR/unica/patches/product_feature/mdnie/hw/SystemUI.apk/0001-Enable-EAD.patch"
+        else
+            LOG "- Environment Adaptive Display (sead) left disabled (Eye Comfort Shield unaffected)"
+        fi
         LOG_STEP_OUT
     fi
 fi

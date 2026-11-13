@@ -1,0 +1,56 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Star7-ROM <star7@rom.local>
+Date: Sat, 10 Oct 2026 10:15:00 +0000
+Subject: [PATCH] Add EAD call-site shim to SemMdnieManager
+
+The EnvironmentAdaptiveDisplay APK (com.samsung.android.sead) calls
+SemMdnieManager;->setEadMode(I[I)V / setEadModeSub(I[I)V, the API 35
+two-argument shape. The One UI 8.5 (API 36) donor framework bumped both
+methods to three arguments (setEadMode(II[I)V), so the APK's call site no
+longer resolves and sead dies with NoSuchMethodError:
+
+  java.lang.NoSuchMethodError: No virtual method setEadMode(I[I)V in class
+  Lcom/samsung/android/hardware/display/SemMdnieManager;
+
+No newer Samsung build restores the two-argument form, so re-declare it
+here as a thin overload that forwards to the three-argument method with a
+default index of 0. This keeps the stock binder ABI (ISemMdnieManager and
+SemMdnieManagerService stay untouched, exactly as stock) and only re-adds
+the client surface the APK links against.
+---
+
+1 file changed, 20 insertions(+)
+
+diff --git a/smali_classes6/com/samsung/android/hardware/display/SemMdnieManager.smali b/smali_classes6/com/samsung/android/hardware/display/SemMdnieManager.smali
+--- a/smali_classes6/com/samsung/android/hardware/display/SemMdnieManager.smali
++++ b/smali_classes6/com/samsung/android/hardware/display/SemMdnieManager.smali
+@@ -679,6 +679,26 @@
+     return v0
+ .end method
+ 
++.method public blacklist setEadMode(I[I)V
++    .locals 1
++
++    const/4 v0, 0x0
++
++    invoke-virtual {p0, p1, v0, p2}, Lcom/samsung/android/hardware/display/SemMdnieManager;->setEadMode(II[I)V
++
++    return-void
++.end method
++
++.method public blacklist setEadModeSub(I[I)V
++    .locals 1
++
++    const/4 v0, 0x0
++
++    invoke-virtual {p0, p1, v0, p2}, Lcom/samsung/android/hardware/display/SemMdnieManager;->setEadModeSub(II[I)V
++
++    return-void
++.end method
++
+ .method public blacklist setEadMode(II[I)V
+     .locals 1
+ 
+-- 
+2.34.1
+
