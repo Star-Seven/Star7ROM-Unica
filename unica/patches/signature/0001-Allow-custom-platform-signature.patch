@@ -1,162 +1,83 @@
-From 63b4793d5c9144f29bc213788069e51721d2fa31 Mon Sep 17 00:00:00 2001
-From: EternityROM d2s bring-up <noreply@localhost>
-Date: Sun, 9 Aug 2026 22:30:00 +0200
-Subject: [PATCH] Trust the ROM key only for patched preinstalled platform apps
+From 161575434a3c32c81b32531839458f87f623bc5f Mon Sep 17 00:00:00 2001
+From: Salvo Giangreco <giangrecosalvo9@gmail.com>
+Date: Tue, 26 Aug 2025 00:06:07 +0200
+Subject: [PATCH] Allow custom platform signature
 
-The Android 16 donor moved package scanning enough that the old unrestricted
-custom-platform-signature patch no longer applied. Keep the compatibility path
-strictly scoped to four known, preinstalled /system packages that this port
-must rebuild. Data-app updates signed with the public AOSP test key are not
-trusted.
+Based off: https://github.com/EverestOS-AOSP/frameworks_base/commit/9d302efb52770dfb85e19c51ad31f781c7844ca3
+
 ---
- .../server/pm/InstallPackageHelper.smali      |  14 ++
- .../android/server/pm/ScanPackageUtils.smali  | 151 +++++++++++++++++-
- 2 files changed, 163 insertions(+), 2 deletions(-)
+ .../pm/PackageManagerServiceUtils.smali       | 10 +++++++
+ .../android/server/pm/ScanPackageUtils.smali  | 50 ++++++++++++++++++
+ 2 files changed, 60 insertions(+)
 
---- a/smali_classes2/com/android/server/pm/InstallPackageHelper.smali
-+++ b/smali_classes2/com/android/server/pm/InstallPackageHelper.smali
-@@ -15052,6 +15052,14 @@
-
-     :cond_11
-     :goto_b
-+    move-object/from16 v0, p0
+diff --git a/smali_classes2/com/android/server/pm/PackageManagerServiceUtils.smali b/smali_classes2/com/android/server/pm/PackageManagerServiceUtils.smali
+index 43479f0ed..0cd434035 100644
+--- a/smali_classes2/com/android/server/pm/PackageManagerServiceUtils.smali
++++ b/smali_classes2/com/android/server/pm/PackageManagerServiceUtils.smali
+@@ -619,6 +619,16 @@
+     return p0
+ .end method
+ 
++.method public static compareSignaturesActual([Landroid/content/pm/Signature;[Landroid/content/pm/Signature;)I
++    .locals 0
 +
-+    iget-object v0, v0, Lcom/android/server/pm/InstallPackageHelper;->mPm:Lcom/android/server/pm/PackageManagerService;
++    invoke-static {p0, p1}, Lcom/android/server/pm/PackageManagerServiceUtils;->compareSignatureArrays([Landroid/content/pm/Signature;[Landroid/content/pm/Signature;)I
 +
-+    iget-object v0, v0, Lcom/android/server/pm/PackageManagerService;->mPlatformPackage:Lcom/android/server/pm/pkg/AndroidPackage;
++    move-result p0
 +
-+    invoke-static {v1, v0}, Lcom/android/server/pm/ScanPackageUtils;->setCustomSignatures(Lcom/android/internal/pm/parsing/pkg/ParsedPackage;Lcom/android/server/pm/pkg/AndroidPackage;)V
++    return p0
++.end method
 +
-     new-instance v0, Lcom/android/server/pm/ScanRequest;
-
-     if-nez v10, :cond_12
-@@ -15943,6 +15951,12 @@
-     invoke-interface {v3, v0}, Lcom/android/internal/pm/parsing/pkg/ParsedPackage;->setSigningDetails(Landroid/content/pm/SigningDetails;)Lcom/android/internal/pm/parsing/pkg/ParsedPackage;
-
-     :goto_19
-+    iget-object v0, v1, Lcom/android/server/pm/InstallPackageHelper;->mPm:Lcom/android/server/pm/PackageManagerService;
-+
-+    iget-object v0, v0, Lcom/android/server/pm/PackageManagerService;->mPlatformPackage:Lcom/android/server/pm/pkg/AndroidPackage;
-+
-+    invoke-static {v3, v0}, Lcom/android/server/pm/ScanPackageUtils;->setCustomSignatures(Lcom/android/internal/pm/parsing/pkg/ParsedPackage;Lcom/android/server/pm/pkg/AndroidPackage;)V
-+
-     const-string/jumbo v0, "PackageManager"
-
-     const-string/jumbo v4, "verifying app can be installed or not"
+ .method public static copyFile(Ljava/lang/String;Ljava/io/File;Ljava/lang/String;)V
+     .locals 2
+ 
+diff --git a/smali_classes2/com/android/server/pm/ScanPackageUtils.smali b/smali_classes2/com/android/server/pm/ScanPackageUtils.smali
+index 5f3ff92c3..f825a535e 100644
 --- a/smali_classes2/com/android/server/pm/ScanPackageUtils.smali
 +++ b/smali_classes2/com/android/server/pm/ScanPackageUtils.smali
-@@ -369,7 +369,7 @@
-
-     if-nez p1, :cond_b
-
--    if-eqz p2, :cond_c
-+    if-eqz p2, :cond_custom_platform
-
-     invoke-interface {p2}, Lcom/android/server/pm/pkg/AndroidPackage;->getSigningDetails()Landroid/content/pm/SigningDetails;
-
-@@ -383,11 +383,22 @@
-
-     move-result p1
-
--    if-nez p1, :cond_c
-+    if-nez p1, :cond_custom_platform
-
-     :cond_b
-     move v1, v2
-
-+    goto :cond_c
+@@ -371,6 +371,8 @@
+ 
+     if-eqz p2, :cond_c
+ 
++    move-object v4, p2
 +
-+    :cond_custom_platform
-+    invoke-static {p0}, Lcom/android/server/pm/ScanPackageUtils;->isSignedWithCustomPlatformKey(Lcom/android/internal/pm/parsing/pkg/ParsedPackage;)Z
+     invoke-interface {p2}, Lcom/android/server/pm/pkg/AndroidPackage;->getSigningDetails()Landroid/content/pm/SigningDetails;
+ 
+     move-result-object p1
+@@ -383,7 +385,26 @@
+ 
+     move-result p1
+ 
+-    if-nez p1, :cond_c
++    if-nez p1, :cond_unica_custom_signature
++
++    goto :cond_b
++
++    :cond_unica_custom_signature
++    invoke-virtual {p2}, Landroid/content/pm/SigningDetails;->getSignatures()[Landroid/content/pm/Signature;
++
++    move-result-object p1
++
++    invoke-static {p1}, Lcom/android/server/pm/ScanPackageUtils;->signedWithCustomSignature([Landroid/content/pm/Signature;)Z
 +
 +    move-result p1
 +
 +    if-eqz p1, :cond_c
 +
-+    move v1, v2
++    invoke-interface {v4}, Lcom/android/server/pm/pkg/AndroidPackage;->getSigningDetails()Landroid/content/pm/SigningDetails;
 +
-     :cond_c
-     invoke-interface {p0, v1}, Lcom/android/internal/pm/parsing/pkg/ParsedPackage;->setSignedWithPlatformKey(Z)Lcom/android/internal/pm/parsing/pkg/ParsedPackage;
-
-@@ -5003,3 +5014,137 @@
-     :goto_2
-     return-void
++    move-result-object p1
++
++    invoke-interface {p0, p1}, Lcom/android/internal/pm/parsing/pkg/ParsedPackage;->setSigningDetails(Landroid/content/pm/SigningDetails;)Lcom/android/internal/pm/parsing/pkg/ParsedPackage;
+ 
+     :cond_b
+     move v1, v2
+@@ -4871,6 +4892,35 @@
+     throw v0
  .end method
-+
-+.method public static isAllowedCustomPlatformPackage(Lcom/android/internal/pm/parsing/pkg/ParsedPackage;)Z
-+    .registers 3
-+
-+    invoke-interface {p0}, Lcom/android/internal/pm/parsing/pkg/ParsedPackage;->getPath()Ljava/lang/String;
-+
-+    move-result-object v0
-+
-+    if-eqz v0, :cond_false
-+
-+    const-string v1, "/system/"
-+
-+    invoke-virtual {v0, v1}, Ljava/lang/String;->startsWith(Ljava/lang/String;)Z
-+
-+    move-result v0
-+
-+    if-eqz v0, :cond_false
-+
-+    invoke-interface {p0}, Lcom/android/internal/pm/parsing/pkg/ParsedPackage;->getPackageName()Ljava/lang/String;
-+
-+    move-result-object p0
-+
-+    const-string v0, "com.android.systemui"
-+
-+    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-+
-+    move-result v0
-+
-+    if-nez v0, :cond_true
-+
-+    const-string v0, "com.samsung.accessibility"
-+
-+    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-+
-+    move-result v0
-+
-+    if-nez v0, :cond_true
-+
-+    const-string v0, "com.samsung.android.biometrics.app.setting"
-+
-+    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-+
-+    move-result v0
-+
-+    if-nez v0, :cond_true
-+
-+    const-string v0, "com.samsung.android.sead"
-+
-+    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-+
-+    move-result v0
-+
-+    if-nez v0, :cond_true
-+
-+    goto :cond_false
-+
-+    :cond_true
-+    const/4 p0, 0x1
-+
-+    return p0
-+
-+    :cond_false
-+    const/4 p0, 0x0
-+
-+    return p0
-+.end method
-+
-+.method public static isSignedWithCustomPlatformKey(Lcom/android/internal/pm/parsing/pkg/ParsedPackage;)Z
-+    .registers 4
-+
-+    invoke-static {p0}, Lcom/android/server/pm/ScanPackageUtils;->isAllowedCustomPlatformPackage(Lcom/android/internal/pm/parsing/pkg/ParsedPackage;)Z
-+
-+    move-result v0
-+
-+    if-eqz v0, :cond_false
+ 
++.method public static signedWithCustomSignature([Landroid/content/pm/Signature;)Z
++    .locals 2
 +
 +    new-instance v0, Landroid/content/pm/Signature;
 +
@@ -164,57 +85,29 @@ trusted.
 +
 +    invoke-direct {v0, v1}, Landroid/content/pm/Signature;-><init>(Ljava/lang/String;)V
 +
-+    const/4 v1, 0x1
++    filled-new-array {v0}, [Landroid/content/pm/Signature;
 +
-+    new-array v1, v1, [Landroid/content/pm/Signature;
++    move-result-object v0
 +
-+    const/4 v2, 0x0
-+
-+    aput-object v0, v1, v2
-+
-+    invoke-interface {p0}, Lcom/android/internal/pm/parsing/pkg/ParsedPackage;->getSigningDetails()Landroid/content/pm/SigningDetails;
-+
-+    move-result-object p0
-+
-+    invoke-virtual {p0}, Landroid/content/pm/SigningDetails;->getSignatures()[Landroid/content/pm/Signature;
-+
-+    move-result-object p0
-+
-+    invoke-static {v1, p0}, Lcom/android/server/pm/PackageManagerServiceUtils;->compareSignatureArrays([Landroid/content/pm/Signature;[Landroid/content/pm/Signature;)I
++    invoke-static {v0, p0}, Lcom/android/server/pm/PackageManagerServiceUtils;->compareSignaturesActual([Landroid/content/pm/Signature;[Landroid/content/pm/Signature;)I
 +
 +    move-result p0
 +
-+    if-nez p0, :cond_false
++    if-nez p0, :cond_0
 +
 +    const/4 p0, 0x1
 +
 +    return p0
 +
-+    :cond_false
++    :cond_0
 +    const/4 p0, 0x0
 +
 +    return p0
 +.end method
 +
-+.method public static setCustomSignatures(Lcom/android/internal/pm/parsing/pkg/ParsedPackage;Lcom/android/server/pm/pkg/AndroidPackage;)V
-+    .registers 3
-+
-+    invoke-static {p0}, Lcom/android/server/pm/ScanPackageUtils;->isSignedWithCustomPlatformKey(Lcom/android/internal/pm/parsing/pkg/ParsedPackage;)Z
-+
-+    move-result v0
-+
-+    if-eqz v0, :cond_return
-+
-+    if-eqz p1, :cond_return
-+
-+    invoke-interface {p1}, Lcom/android/server/pm/pkg/AndroidPackage;->getSigningDetails()Landroid/content/pm/SigningDetails;
-+
-+    move-result-object p1
-+
-+    invoke-interface {p0, p1}, Lcom/android/internal/pm/parsing/pkg/ParsedPackage;->setSigningDetails(Landroid/content/pm/SigningDetails;)Lcom/android/internal/pm/parsing/pkg/ParsedPackage;
-+
-+    :cond_return
-+    return-void
-+.end method
---
+ .method public static setInstantAppForUser(Lcom/android/server/pm/PackageManagerServiceInjector;Lcom/android/server/pm/PackageSetting;IZZ)V
+     .locals 6
+ 
+-- 
 2.51.0
+
