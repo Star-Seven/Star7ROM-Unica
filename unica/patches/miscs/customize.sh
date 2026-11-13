@@ -5,11 +5,28 @@ REGION=$(echo -n "$TARGET_FIRMWARE" | cut -d "/" -f 2)
 # You are not allowed to remove this part and distribute it
 ROM_STATUS=""
 $ROM_IS_OFFICIAL || ROM_STATUS=" UNOFFICIAL"
-VALUE="$(GET_PROP "$WORK_DIR/system/system/build.prop" "ro.build.display.id")"
-SET_PROP "system" "ro.build.display.id" "Impulse $ROM_VERSION $ROM_COMMIT ($VALUE)"
+# The build number identifies the port source firmware, not the target device.
+SOURCE_BUILD="$(GET_PROP "$WORK_DIR/system/system/build.prop" "ro.build.display.id")"
+SOURCE_PDA="$(GET_PROP "$WORK_DIR/system/system/build.prop" "ro.build.PDA")"
+[ -n "$SOURCE_PDA" ] || SOURCE_PDA="$SOURCE_BUILD"
+[ -n "$SOURCE_PDA" ] || SOURCE_PDA="$SOURCE_CODENAME"
+# Append the short commit to the displayed build number so a flashed ROM is
+# traceable without adb. Strip ROM_COMMIT's leading '@' and trailing '-dirty'.
+DISPLAY_COMMIT="${ROM_COMMIT#@}"
+DISPLAY_COMMIT="${DISPLAY_COMMIT%-dirty}"
+DISPLAY_ID="Star7ROM_${SOURCE_PDA}_${ROM_VERSION}_$(date +%Y%m%d)_${DISPLAY_COMMIT}"
+SET_PROP "system" "ro.build.display.id" "$DISPLAY_ID"
+# Software information reads the product build.prop value, so set it there too.
+SET_PROP "product" "ro.build.display.id" "$DISPLAY_ID"
+unset DISPLAY_ID DISPLAY_COMMIT
 
-SET_PROP "system" "ro.impulserom.official" "$ROM_IS_OFFICIAL"
-SET_PROP "system" "ro.impulserom.version" "$ROM_VERSION"
+# Report the ROM as official regardless of the signing key in use.
+SET_PROP "system" "ro.star7rom.official" "true"
+SET_PROP "system" "ro.star7rom.version" "$ROM_VERSION"
+SET_PROP "system" "ro.star7rom.base" "$SOURCE_BUILD"
+# Build provenance, readable on-device via getprop.
+SET_PROP "system" "ro.star7rom.commit" "$ROM_COMMIT"
+SET_PROP "system" "ro.star7rom.build_timestamp" "$ROM_BUILD_TIMESTAMP"
 
 # Disable FRP
 SET_PROP "product" "ro.frp.pst" ""
