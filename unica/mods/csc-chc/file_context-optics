@@ -1,0 +1,10 @@
+/optics u:object_r:vendor_file:s0
+/optics/configs u:object_r:vendor_configs_file:s0
+/optics/configs/carriers u:object_r:vendor_configs_file:s0
+/optics/configs/carriers/CHC u:object_r:vendor_configs_file:s0
+/optics/configs/carriers/CHC/conf u:object_r:vendor_configs_file:s0
+/optics/configs/carriers/CHC/conf/customer\.xml u:object_r:vendor_configs_file:s0
+/optics/configs/carriers/CHC/conf/omc\.info u:object_r:vendor_configs_file:s0
+/optics/configs/carriers/CHC/conf/system u:object_r:vendor_configs_file:s0
+/optics/configs/carriers/CHC/conf/system/cscfeature\.xml u:object_r:vendor_configs_file:s0
+/optics/configs/carriers/CHC/conf/system/customer_carrier_feature\.json u:object_r:vendor_configs_file:s0

@@ -1,0 +1,4 @@
+id=csc-chc
+name=China (CHC) OMC
+author=Star7ROM
+description=Replaces the stock OXM multi-CSC OMC with the China (CHC) single-CSC OMC extracted from the Galaxy S24 (SM-S9260). Drops the source prism/optics first so only the CHC configuration ships.

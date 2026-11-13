@@ -1,0 +1,2 @@
+China (CHC) variant only: this module ships the pure CHC OMC.
+Skipped for the international build (the shipped 'csc' mod owns the OMC there).

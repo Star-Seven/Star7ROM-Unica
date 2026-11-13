@@ -1,0 +1,147 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+
+<!--
+Copyright (C) 2016 The Android Open Source Project
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<favorites xmlns:launcher="http://schemas.android.com/apk/res/com.sec.android.app.launcher">
+    <homeGridInfo default="4x6" /> 
+
+    <home>
+        <!-- appwidget : Weather -->
+        <appwidget 
+            screen="0" 
+            packageName="com.sec.android.daemonapp" 
+            className="com.sec.android.daemonapp.appwidget.WeatherAppWidget2x1" 
+            x="1" 
+            y="2" 
+            spanX="2" 
+            spanY="2" />
+
+        <!-- appwidget : Search -->
+        <appwidget 
+            screen="0" 
+            packageName="com.samsung.android.app.searchwidget" 
+            className="com.samsung.android.app.searchwidget.ui.SearchWidget" 
+            x="0" 
+            y="4" 
+            spanX="4" 
+            spanY="1" />
+
+        <!-- Galaxy Store -->
+        <favorite 
+            screen="0" 
+            packageName="com.sec.android.app.samsungapps" 
+            className="com.sec.android.app.samsungapps.SamsungAppsMainActivity" 
+            x="0" 
+            y="5" />
+
+        <!-- Gallery -->
+        <favorite 
+            screen="0" 
+            packageName="com.sec.android.gallery3d" 
+            className="com.samsung.android.gallery.app.activity.GalleryActivity" 
+            x="1" 
+            y="5" />
+
+        <!-- Galaxy Themes -->
+        <favorite 
+            screen="0" 
+            packageName="com.samsung.android.themestore" 
+            className="com.samsung.android.themestore.activity.Launcher" 
+            x="2" 
+            y="5" />
+
+        <!-- Samsung Assistant -->
+        <favorite 
+            screen="0" 
+            packageName="com.samsung.android.app.sreminder" 
+            className="com.samsung.android.app.sreminder.SReminderActivity" 
+            x="3" 
+            y="5" />
+
+        <!-- Clock -->
+        <favorite 
+            screen="1" 
+            packageName="com.sec.android.app.clockpackage" 
+            className="com.sec.android.app.clockpackage.ClockPackage" 
+            x="0" 
+            y="5" />
+
+        <!-- Samsung Wallet -->
+        <favorite 
+            screen="1" 
+            packageName="com.samsung.android.spay" 
+            className="com.samsung.android.spay.ui.SpayMainActivity" 
+            x="1" 
+            y="5" />
+
+        <!-- Game Launcher -->
+        <favorite 
+            screen="1" 
+            packageName="com.samsung.android.game.gamehome" 
+            className="com.samsung.android.game.gamehome.activity.StartActivityCN" 
+            x="2" 
+            y="5" />
+
+        <!-- folder : Microsoft 应用程序 -->
+        <folder 
+            screen="1" 
+            title="Microsoft 应用程序" 
+            x="3" 
+            y="5">
+            <!-- Microsoft Office -->
+            <favorite 
+                screen="0" 
+                packageName="com.microsoft.office.officehub" 
+                className="com.microsoft.office.officesuite.OfficeSuiteActivity" />
+            <!-- Outlook -->
+            <favorite 
+                screen="1" 
+                packageName="com.microsoft.office.outlook" 
+                className="com.microsoft.office.outlook.MainActivity" />
+        </folder>
+
+    </home>
+
+
+
+    <hotseat>
+        <!-- Phone -->
+        <favorite 
+            screen="0" 
+            packageName="com.samsung.android.dialer" 
+            className="com.samsung.android.dialer.DialtactsActivity" />
+
+        <!-- Messages -->
+        <favorite 
+            screen="1" 
+            packageName="com.samsung.android.messaging" 
+            className="com.android.mms.ui.ConversationComposer" />
+
+        <!-- Samsung Internet -->
+        <favorite 
+            screen="2" 
+            packageName="com.sec.android.app.sbrowser" 
+            className="com.sec.android.app.sbrowser.SBrowserMainActivity" />
+
+        <!-- Camera -->
+        <favorite 
+            screen="3" 
+            packageName="com.sec.android.app.camera" 
+            className="com.sec.android.app.camera.Camera" />
+
+    </hotseat>
+
+</favorites>

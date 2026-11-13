@@ -1,0 +1,7 @@
+#-----------------Usage-------------------
+#PackageName/PermissionName
+com.google.android.syncadapters.contacts/android.permission.READ_CONTACTS
+com.google.android.syncadapters.contacts/android.permission.WRITE_CONTACTS
+com.google.android.syncadapters.contacts/android.permission.GET_ACCOUNTS
+com.google.android.syncadapters.calendar/android.permission.READ_CALENDAR
+com.google.android.syncadapters.calendar/android.permission.WRITE_CALENDAR

@@ -1,0 +1,10 @@
+ 0 0 755 capabilities=0x0
+optics/configs 0 0 755 capabilities=0x0
+optics/configs/carriers 0 0 755 capabilities=0x0
+optics/configs/carriers/CHC 0 0 755 capabilities=0x0
+optics/configs/carriers/CHC/conf 0 0 755 capabilities=0x0
+optics/configs/carriers/CHC/conf/customer.xml 0 0 644 capabilities=0x0
+optics/configs/carriers/CHC/conf/omc.info 0 0 644 capabilities=0x0
+optics/configs/carriers/CHC/conf/system 0 0 755 capabilities=0x0
+optics/configs/carriers/CHC/conf/system/cscfeature.xml 0 0 644 capabilities=0x0
+optics/configs/carriers/CHC/conf/system/customer_carrier_feature.json 0 0 644 capabilities=0x0

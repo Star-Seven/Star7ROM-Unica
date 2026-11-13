@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SW-Configuration>
+    <MobileData>
+        <PublicName>SM-S9260</PublicName>
+    </MobileData>
+    <OmcYn>Y</OmcYn>
+    <MultiCode>CHC</MultiCode>
+    <CustomerDataSet>
+        <CSCName>S9260CHC</CSCName>
+        <CSCVersion>6DZH3</CSCVersion>
+        <NbCustomer>1</NbCustomer>
+        <CustomerData src="/Customer/CHC/customer.xml" />
+    </CustomerDataSet>
+    <OmcInfo>
+        <OmcCode>
+            <CustomerCode>CHC</CustomerCode>
+            <Version>SAOMC_SM-S9260_CHC_CHC_16_0005</Version>
+            <CustomerEdition>ED0001</CustomerEdition>
+        </OmcCode>
+    </OmcInfo>
+</SW-Configuration>
