@@ -11,15 +11,12 @@ diff --git a/smali_classes2/com/android/server/pm/InstallPackageHelper.smali b/s
 index 3c11a3ac1..72112ba4d 100644
 --- a/smali_classes2/com/android/server/pm/InstallPackageHelper.smali
 +++ b/smali_classes2/com/android/server/pm/InstallPackageHelper.smali
-@@ -17053,7 +17053,7 @@
-     goto :goto_d
+@@ -15633,7 +15633,7 @@
  
-     :cond_13
--    const/4 v2, 0x0
-+    const/4 v2, 0x1
+     sget v15, Lcom/android/server/pm/PackageManagerService;->MIN_INSTALLABLE_TARGET_SDK:I
  
-     :goto_d
-     if-nez v2, :cond_14
--- 
-2.45.2
-
+-    if-lt v0, v15, :cond_18
++    goto :goto_12
+ 
+     goto :goto_12
+ 

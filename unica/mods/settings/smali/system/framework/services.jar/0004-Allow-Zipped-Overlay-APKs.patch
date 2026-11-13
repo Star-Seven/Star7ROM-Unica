@@ -5,26 +5,40 @@ Subject: [PATCH] Allow Zipped Overlay APKs
 
 Signed-off-by: ExtremeXT <75576145+ExtremeXT@users.noreply.github.com>
 ---
- .../com/android/server/pm/InstallPackageHelper.smali        | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ .../com/android/server/pm/InstallPackageHelper.smali        | 13 +------------
+ 1 file changed, 3 insertions(+), 10 deletions(-)
 
 diff --git a/smali_classes2/com/android/server/pm/InstallPackageHelper.smali b/smali_classes2/com/android/server/pm/InstallPackageHelper.smali
 index db5aeabe..7c957b05 100644
 --- a/smali_classes2/com/android/server/pm/InstallPackageHelper.smali
 +++ b/smali_classes2/com/android/server/pm/InstallPackageHelper.smali
-@@ -13197,11 +13197,7 @@
+@@ -261,26 +261,11 @@
+ .end method
  
-     move-result v3
+ .method public static hasZippedOverlays(Lcom/android/internal/pm/parsing/pkg/ParsedPackage;)Z
+-    .locals 1
++    .locals 0
  
--    sget v6, Landroid/os/Build$VERSION;->DEVICE_INITIAL_SDK_INT:I
+-    invoke-interface {p0}, Lcom/android/internal/pm/parsing/pkg/ParsedPackage;->getMetaData()Landroid/os/Bundle;
++    const/4 v0, 0x0
+ 
+-    move-result-object p0
 -
--    const/16 v12, 0x23
+-    if-nez p0, :cond_0
 -
--    if-lt v6, v12, :cond_c
-+    goto :cond_d
+-    const/4 p0, 0x0
+-
+-    return p0
+-
+-    :cond_0
+-    const-string/jumbo v0, "com.samsung.android.hasZippedOverlays"
+-
+-    invoke-virtual {p0, v0}, Landroid/os/Bundle;->getBoolean(Ljava/lang/String;)Z
+-
+-    move-result p0
+-
+-    return p0
++    return v0
+ .end method
  
-     if-eqz v0, :cond_c
- 
--- 
-2.45.2
-
+ .method public static isAdminApplication(Lcom/android/server/pm/pkg/AndroidPackage;)Z
